@@ -6,6 +6,13 @@
 * Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a different directory.
 * Copy `.lando.yml` and `./lando/` from this repo into the root of the Drupal 11 project directory.
 * `cd` into the Drupal 11 project directory.
+* Edit `./web/sites/default/settings.php`
+  * Uncomment these lines:
+  ```
+  if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+    include $app_root . '/' . $site_path . '/settings.local.php';
+  }
+  ```
 * Run `lando start`.
 * Assuming `lando start` completes successfully, visit one of the URLs given.
 * Follow the Drupal installation GUI. When asked for database credentials, enter:
