@@ -1,0 +1,140 @@
+name: drupal-11-dev
+recipe: drupal10
+config:
+  framework: drupal10
+  site: drupal-11-dev
+  webroot: web
+  php: '8.3'
+  # Set xdebug to off by default. Enable it with lando xdebug.
+  xdebug: false
+  database: mysql:8.0
+  config:
+    php: lando/configs/php/php.ini
+services:
+  appserver:
+    build_as_root:
+      # Configure PHP.
+      # For some reason php.ini keeps being copied as a directory.
+      # To fix this on rebuild where it's already happened, we need to remove the directory.
+      - rm -rf /app/lando/configs/php/php.ini
+      - rm -f /app/lando/configs/php/php.ini
+      - cp /app/lando/configs/php/default.php.ini /app/lando/configs/php/php.ini
+      # Create error logs.
+      - mkdir -p /app/lando/logs
+      - rm -f /app/lando/logs/php_errors.log
+      - touch /app/lando/logs/php_errors.log
+      - rm -f /app/lando/logs/xdebug.log
+      - touch /app/lando/logs/xdebug.log
+      # Create custom Drush config to override PHP memory_limit from php.ini.
+      - mkdir -p ~/.drush
+      - cp /app/lando/configs/drush/drush.ini ~/.drush/drush.ini
+      - mkdir -p /etc/drush
+      - cp /app/lando/configs/drush/drush.ini /etc/drush/drush.ini
+      # Install Nano for debugging purposes (You can use nano after running lando ssh to enter container).
+      - mkdir -p /var/lib/apt/lists/partial
+      - apt-get update && apt install nano
+      # Start developer off with reasonable local Drupal settings.
+      - cp /app/lando/configs/drupal/settings.local.php /app/web/sites/default/settings.local.php
+      - cp /app/lando/configs/drupal/development.services.yml /app/web/sites/development.services.yml
+    overrides:
+      environment:
+        BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "https://drupal-11-dev.lndo.site/"}, "Drupal\\DrupalExtension" : {"drush" : { "root": "/app/web" }}}}'
+        # Support debugging Drush with Xdebug.
+        PHP_IDE_CONFIG: "serverName=appserver"
+        DRUSH_OPTIONS_URI: "https://drupal-11-dev.lndo.site/"
+        # This is apparently necessary to overwrite the default Xdebug 3.0
+        # config so that our config in /lando/configs/php/php.ini is used.
+        XDEBUG_MODE:
+  database:
+    portforward: 32816
+    creds:
+      user: drupal
+      password: drupal
+      database: drupal
+  # Selenium Chrome for Behat tests.
+  # Feel free to delete if not using Behat.
+  selenium-chrome:
+    type: compose
+    app_mount: false
+    services:
+      image: seleniarm/standalone-chromium:101.0-20220429
+      environment:
+        TZ: America/Los_Angeles
+        START_XVBF: "false"
+      volumes:
+        - /dev/shm:/dev/shm
+        - ./tests/behat/media:/media:cached
+      command: /opt/bin/entry_point.sh
+events:
+  pre-start:
+    - appserver: composer install
+  post-pull:
+    - appserver: /app/lando/scripts/helpers/post-pull.sh
+tooling:
+  # Override Drush to run with no memory limit and use version installed by Composer instead of packaged with Lando.
+  drush:
+    service: appserver
+    description: Run Drush commands
+    cmd: php -d memory_limit=-1 /app/vendor/bin/drush
+  drupal-reinstall:
+    service: appserver
+    description: Drops database, runs composer install, runs drush site:install (Use if you want no database content)
+    cmd:
+      - /app/lando/scripts/drupal-reinstall.sh
+  drupal-reset:
+    service: appserver
+    description: Runs composer install, updates database, imports config and clears caches (Use if you want to keep database content)
+    cmd:
+      - /app/lando/scripts/drupal-reset.sh
+  xdebug:
+    description: Starts or stops Xdebug
+    cmd:
+      - appserver: /app/lando/scripts/xdebug.sh
+    user: root
+  logs-php:
+    service: appserver
+    description: Displays and tails PHP error logs
+    cmd: tail -f /app/lando/logs/php_errors.log
+  logs-xdebug:
+    service: appserver
+    description: Displays and tails Xdebug logs
+    cmd: tail -f /app/lando/logs/xdebug.log
+  logs-drupal:
+    service: appserver
+    description: Displays and tails Drupal logs using Drush
+    cmd:
+      - drush wt --extended
+  php-cs:
+    service: appserver
+    description: Runs PHP_CodeSniffer on custom modules and themes
+    cmd:
+      - /app/lando/scripts/php-cs.sh
+  twig-cs:
+    service: appserver
+    description: Runs Twig-CS-Fixer on custom themes and modules
+    cmd:
+      - /app/lando/scripts/twig-cs.sh
+  phpunit:
+    service: appserver
+    cmd:
+      - /app/lando/scripts/phpunit.sh
+  behat:
+    service: appserver
+    description: Runs Behat tests
+    cmd:
+      - /app/lando/scripts/behat.sh
+  behat-search-steps:
+    service: appserver
+    description: Searches (greps) Behat step definitions for string
+    cmd:
+      - /app/lando/scripts/behat-search-steps.sh
+  drupal-create-users:
+    service: appserver
+    description: Creates Drupal user accounts for testing/development purposes
+    cmd:
+      - /app/lando/scripts/drupal-create-users.sh
+  drupal-status:
+    service: appserver
+    description: Runs drush status and drush config-status
+    cmd:
+      - /app/lando/scripts/drupal-status.sh
