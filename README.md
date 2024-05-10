@@ -20,6 +20,8 @@
   * Database name: drupal
   * Database username: drupal
   * Database password: drupal
+* You should have a working Drupal site.
+* Feel free to delete this repo that you cloned.
 
 # If using as the basis of an actual project
 
