@@ -78,12 +78,12 @@ tooling:
     cmd: php -d memory_limit=-1 /app/vendor/bin/drush
   drupal-reinstall:
     service: appserver
-    description: Drops database, runs composer install, runs drush site:install (Use if you want no database content)
+    description: DROPs the current database, runs composer install, drush site:install, database updates, config import, deploy hooks and clears caches
     cmd:
       - /app/lando/scripts/drupal-reinstall.sh
   drupal-reset:
     service: appserver
-    description: Runs composer install, updates database, imports config and clears caches (Use if you want to keep database content)
+    description: KEEPs the current database, runs composer install, database updates, config import, deploy hooks and clears caches
     cmd:
       - /app/lando/scripts/drupal-reset.sh
   xdebug:

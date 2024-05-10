@@ -2,6 +2,7 @@
 
 # How to use
 
+* Install Lando (https://docs.lando.dev/install/macos.html).
 * Git clone this repo.
 * Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a different directory.
 * Copy `.lando.yml` and `./lando/` from this repo into the root of the Drupal 11 project directory.
@@ -14,7 +15,7 @@
   }
   ```
 * Run `lando start`.
-* Assuming `lando start` completes successfully, visit one of the URLs given.
+* Assuming `lando start` completes successfully, visit one of the URLs given. Bypass the browser privacy warning (you'll have to do this every time after `lando start`).
 * Follow the Drupal installation GUI. When asked for database credentials, enter:
   * Database name: drupal
   * Database username: drupal
@@ -32,13 +33,13 @@ Run `lando` to see all commands.
 ```
 lando drupal-reinstall
 ```
-DROPs the current database, runs `composer install`, `drush site:install`, runs database updates, runs composer install and clears caches.
+DROPs the current database, runs `composer install`, `drush site:install`, database updates, config import, deploy hooks and clears caches.
 
 ## lando drupal-reset
 ```
 lando drupal-reset
 ```
-KEEPs the current database, runs `composer install`, runs database updates, runs composer install and clears caches.
+KEEPs the current database, runs `composer install`, database updates, config import, deploy hooks and clears caches.
 
 ## lando drupal-create-users
 ```
