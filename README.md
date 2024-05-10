@@ -22,7 +22,7 @@
   * Database password: drupal
 * You should have a working Drupal site.
 * Run `lando` to see all Lando tooling commands.
-* Feel free to delete this repo that you cloned.
+* Feel free to delete this repo that you cloned. From this point on, do all your work within the Drupal 11 project directory.
 * We're using the Lando Drupal plugin and the `drupal11` recipe, so be sure to read the Lando docs (https://docs.lando.dev/plugins/drupal/tooling.html).
 
 # If using as the basis of an actual project
@@ -63,7 +63,7 @@ This customized command will run Drush without the memory limit configured for P
 
 # Custom Lando tooling commands
 
-These are potentially useful tooling commands/scripts that are complete custom. Most of them will not be usable until you require the dependency via Composer.
+These are potentially useful tooling commands/scripts that are completely custom. Most of them will not be usable until you require the dependency via Composer.
 
 Feel free to delete any that are not useful to you.
 
