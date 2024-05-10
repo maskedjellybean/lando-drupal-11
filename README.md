@@ -23,7 +23,7 @@
 
 # If using as the basis of an actual project
 
-If you plan to use this as the basis of an actual project:
+After following the directions under "How to use", if you plan to use this as the basis of an actual project:
 * Run `lando destroy -y && lando start`. Beware you will lose your current database.
 * Find all instances of "drupal-11-dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
 * Run `lando start`.
@@ -94,6 +94,6 @@ You will need to configure and require Behat and dependencies first.
 ```
 lando xdebug
 ```
-Toggles Xdebug on/off.
+Toggles Xdebug on/off. Optionally enables/disables caching by modifying `settings.local.php`. Disabling caching ensures breakpoints are triggered.
 
 You will also need to configure your IDE.
