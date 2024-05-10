@@ -21,7 +21,9 @@
   * Database username: drupal
   * Database password: drupal
 * You should have a working Drupal site.
+* Run `lando` to see all Lando tooling commands.
 * Feel free to delete this repo that you cloned.
+* We're using the Lando Drupal plugin and the `drupal11` recipe, so be sure to read the Lando docs (https://docs.lando.dev/plugins/drupal/tooling.html).
 
 # If using as the basis of an actual project
 
@@ -30,9 +32,38 @@ After following the directions under "How to use", if you plan to use this as th
 * Find all instances of "drupal-11-dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
 * Run `lando start`.
 
+## Configuration
+
+Included is a `settings.local.php`, `php.ini` and `drush.ini` with reasonable settings. You can find them in `./lando/configs/`.
+Feel free to modify them for your needs. After modifying, run `lando rebuild -y`.
+
+# Non custom Lando tooling commands
+
+These came along with the drupal11 recipe we used, but they're worth mentioning.
+
+## lando composer
+```
+lando composer
+```
+Runs Composer commands.
+
+# Slightly custom Lando tooling commands
+
+These came along with the drupal11 recipe we used, but they're slightly customized.
+
+## lando drush
+```
+lando drush
+```
+Runs Drush commands.
+
+In order to use this, run `lando composer require drush/drush` first.
+
+This customized command will run Drush without the memory limit configured for PHP in `./lando/configs/php/php.ini`.
+
 # Custom Lando tooling commands
 
-Included are potentially useful tooling commands/scripts. Most of them will not be usable until you require the dependency via Composer. For example, `lando composer require drush/drush`.
+These are potentially useful tooling commands/scripts that are complete custom. Most of them will not be usable until you require the dependency via Composer.
 
 Feel free to delete any that are not useful to you.
 
