@@ -21,7 +21,14 @@
   * Database username: drupal
   * Database password: drupal
 
-# Lando tooling commands
+# If using as the basis of an actual project
+
+If you plan to use this as the basis of an actual project:
+* Run `lando destroy -y && lando start`. Beware you will lose your current database.
+* Find all instances of "drupal-11-dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
+* Run `lando start`.
+
+# Custom Lando tooling commands
 
 Included are potentially useful tooling commands/scripts. Most of them will not be usable until you require the dependency via Composer. For example, `lando composer require drush/drush`.
 
