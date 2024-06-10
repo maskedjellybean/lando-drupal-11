@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+# Runs Behat CLI commands.
+#
+# Use via lando tooling:
+# lando behat features/Feature-Name.feature:40
+
+source /app/lando/scripts/helpers/color-vars.sh
 
 ARGS="$@"
 

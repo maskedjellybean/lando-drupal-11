@@ -2,14 +2,7 @@
 
 # This file is configured in .lando.yml. Run: lando drupal-status.
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+source /app/lando/scripts/helpers/color-vars.sh
 
 echo
 echo -e "${CYAN}Checking the health/status of Drupal...${NORMAL} 🩺 🔍"
@@ -39,3 +32,5 @@ else
   echo -e "${GREEN}All config is imported!${NORMAL} 🔧 ✅"
   echo
 fi
+
+# @todo Run Composer security check.

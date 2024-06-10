@@ -1,16 +1,11 @@
 #!/usr/bin/env bash
 
-# This script is configured in .lando.yml. Run: lando drupal-reinstall.
-# It will drop the database, run composer install and run drush site:install.
+# Drops the database, runs composer install and drush site:install.
+#
+# Use via lando tooling:
+# lando drupal-reinstall.
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+source /app/lando/scripts/helpers/color-vars.sh
 
 echo -e "${CYAN}"
 cat << "EOF"
@@ -26,15 +21,13 @@ echo -e "${NORMAL}"
 
 echo -e "${ORANGE}Are you sure you want to drop the database, run composer install and (re)install the site?"
 echo -e "${RED}You will lose all unexported config and ALL database content. ⚠️ 💣"
-echo -e "${BLUE}(y/n):${BLUE}"
-read REPLY
-if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+source /app/lando/scripts/helpers/prompt-confirm.sh
+if [[ $(prompt_confirm "Proceed?") = "no" ]]; then
   exit 1
 fi
-echo -e "${NORMAL}"
 
 echo
-echo -e "${CYAN}Dropping database, running composer install, running drush site:install, config import and clearing caches...${NORMAL}"
+echo -e "${CYAN}Dropping database, running composer install, running drush site:install, config import, deploy hooks and clearing caches...${NORMAL}"
 echo
 
 echo
@@ -69,7 +62,7 @@ else
   exit 1
 fi
 
-/app/lando/scripts/helpers/drupal-update-import.sh --config all
+/app/lando/scripts/helpers/drupal-update-import.sh --config all --users true
 
 echo
 echo -e "${CYAN}Or use this link to login:${NORMAL}"

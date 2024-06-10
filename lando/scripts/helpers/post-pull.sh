@@ -1,16 +1,9 @@
 #!/usr/bin/env bash
 
-# This file is configured in .lando.yml to run after `lando pull`.
-# It's also called by `lando pull-db-X`.
+# Prompts user to run composer install, database updates and config import after pulling database from Acquia.
+# Runs post `lando pull`.
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+source /app/lando/scripts/helpers/color-vars.sh
 
 
 # First make sure lando pull worked.
@@ -26,7 +19,7 @@ else
 fi
 
 echo -e "${ORANGE}If you pulled the database from an Acquia environment there may be unimported config. How should we proceed?"
-echo -e "${NORMAL}Either way we will run composer install, database updates and clear caches."
+echo -e "${NORMAL}Either way we will run composer install, database updates, deploy hooks and clear caches."
 echo -e "${BLUE}(1) Import all config."
 echo -e "${BLUE}(2) Import only the local config split."
 echo -e "${BLUE}(3) Don't import config."

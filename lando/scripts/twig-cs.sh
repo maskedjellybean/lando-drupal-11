@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+# Runs Twig-CS-Fixer.
+#
+# Use via lando tooling:
+# lando twig-cs
+
+source /app/lando/scripts/helpers/color-vars.sh
 
 echo
 echo -e "${CYAN}Running Twig CS Fixer... ${NORMAL}"
@@ -23,16 +21,14 @@ if [ "$exitStatus" = 0 ]; then
   echo
 elif [ "$exitStatus" = 1 ]; then
   echo
-  echo -e "${ORANGE}Some issues were found. Should we try to fix them automatically?"
-  echo -e "${BLUE}(y/n): ${BLUE}"
-  read REPLY
-  if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    echo
-    echo -e "${CYAN}Running Twig CS Fixer... ${NORMAL}"
-    echo
-
-    /app/vendor/bin/twig-cs-fixer lint --fix /app/web/themes/custom /app/web/modules/custom
-  else
+  source /app/lando/scripts/helpers/prompt-confirm.sh
+  if [[ $(prompt_confirm "Some issues were found. Should we try to fix them automatically?") = "no" ]]; then
     exit 1
   fi
+
+  echo
+  echo -e "${CYAN}Running Twig CS Fixer... ${NORMAL}"
+  echo
+
+  /app/vendor/bin/twig-cs-fixer lint --fix /app/web/themes/custom /app/web/modules/custom
 fi

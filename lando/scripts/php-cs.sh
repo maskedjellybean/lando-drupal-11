@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+# Runs PHP_CodeSniffer.
+#
+# Use via lando tooling:
+# lando php-cs
+
+source /app/lando/scripts/helpers/color-vars.sh
+
+ARGS="$@"
 
 echo
 echo -e "${CYAN}Running PHPCS... ${NORMAL}"
 echo
 
 # See: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage
-/app/vendor/bin/phpcs
+/app/vendor/bin/phpcs $ARGS
 exitStatus=$?
 
 if [ "$exitStatus" = 0 ]; then
@@ -27,18 +27,16 @@ elif [ "$exitStatus" = 1 ]; then
   echo
 elif [ "$exitStatus" = 2 ]; then
   echo
-  echo -e "${ORANGE}Some issues were found that can be fixed automatically. Want to try?"
-  echo -e "${BLUE}(y/n): ${BLUE}"
-  read REPLY
-  if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-    echo
-    echo -e "${CYAN}Running PHPCBF... ${NORMAL}"
-    echo
-
-    /app/vendor/bin/phpcbf
-  else
+  source /app/lando/scripts/helpers/prompt-confirm.sh
+  if [[ $(prompt_confirm "Some issues were found that can be fixed automatically. Want to try?") = "no" ]]; then
     exit 1
   fi
+
+  echo
+  echo -e "${CYAN}Running PHPCBF... ${NORMAL}"
+  echo
+
+  /app/vendor/bin/phpcbf
 elif [ "$exitStatus" = 3 ]; then
   echo
   echo -e "${CYAN}Some kind of processing error has occurred (phpcs error code 3)..️${NORMAL} 🤷‍"

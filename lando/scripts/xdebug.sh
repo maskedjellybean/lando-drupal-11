@@ -1,16 +1,18 @@
 #!/usr/bin/env bash
 
-# Script to enable/disable Xdebug and set mode.
+# Enables/disables Xdebug and sets mode.
 # See: https://github.com/lando/lando/issues/1668#issuecomment-772829423
+#
+# Use via lando tooling:
+# lando xdebug.
+#
+# ARGS:
+# "on", "off", or a valid Xdebug mode such as "debug". string.
+#
+# Usage example:
+# lando xdebug on
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+source /app/lando/scripts/helpers/color-vars.sh
 
 MODE='on'
 

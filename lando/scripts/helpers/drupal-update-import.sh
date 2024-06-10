@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 
-# This script is called by `lando pull-db-X`, `lando drupal-reinstall` and `lando drupal-reset`.
+# Runs composer install, database updates, config import etc.
+# Called by `lando drupal-reinstall` and `lando drupal-reset` and post `lando pull`.
+#
+# ARGS/FLAGS:
+# --config
+#   string. The config to import ("all", "local" or "none").
+# --users
+#   boolean. Whether to create test users (true or false).
 
-NORMAL="\033[0m"
-RED="\033[31m"
-GREEN="\033[32m"
-YELLOW="\033[1;33m"
-ORANGE="\033[33m"
-PINK="\033[35m"
-BLUE="\033[34m"
-CYAN="\033[36m"
+source /app/lando/scripts/helpers/color-vars.sh
 
 # Set argument option defaults
-CONFIG='all'; # The config to import ("all", "local" or "none").
+CONFIG='all';
+USERS=true;
 
 # PARSE THE ARGZZ
 while (( "$#" )); do
@@ -24,6 +25,16 @@ while (( "$#" )); do
         shift
       else
         CONFIG=$2
+        shift 2
+      fi
+      ;;
+    -u|--users|--users=*)
+      echo '--'
+      if [ "${1##--users=}" != "$1" ]; then
+        USERS="${1##--users=}"
+        shift
+      else
+        USERS=$2
         shift 2
       fi
       ;;
@@ -114,12 +125,7 @@ php -d memory_limit=-1 /app/vendor/drush/drush/drush cr
 # Run Drupal health/status check.
 /app/lando/scripts/drupal-status.sh
 
-echo -e "${ORANGE}Do you want to create test user accounts?"
-echo -e "${BLUE}(y/n):${BLUE}"
-read REPLY
-if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-  exit 1
-else
+if [ "$USERS" = true ]; then
   # Create test user accounts.
   /app/lando/scripts/drupal-create-users.sh
 fi
