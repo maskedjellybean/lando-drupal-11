@@ -33,4 +33,6 @@ else
   echo
 fi
 
-# @todo Run Composer security check.
+echo -e "${CYAN}Running composer audit to check for security vulnerabilities...${NORMAL} 🩺 🔍 🛡️"
+echo
+composer audit

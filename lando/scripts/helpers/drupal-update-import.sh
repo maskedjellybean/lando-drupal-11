@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Runs composer install, database updates, config import etc.
-# Called by `lando drupal-reinstall` and `lando drupal-reset` and post `lando pull`.
+# Called by `lando drupal-reinstall` and `lando drupal-reset`.
 #
 # ARGS/FLAGS:
 # --config
@@ -106,15 +106,21 @@ echo -e "${CYAN}Clearing caches...${NORMAL}"
 echo
 php -d memory_limit=-1 /app/vendor/drush/drush/drush cr
 
-echo
-echo -e "${CYAN}Running deploy hooks...${NORMAL}"
-echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush deploy:hook -y
-if [[ $? != 0 ]]; then
+# Only run deploy hooks if we've imported all config
+# because a deploy hook may depend on new config having been
+# imported (for example when we create a field via config
+# and then set the value via deploy hook).
+if [ "$CONFIG" = 'all' ]; then
   echo
-  echo -e "${RED}Deploy hooks failed!${NORMAL} ❌"
+  echo -e "${CYAN}Running deploy hooks...${NORMAL}"
   echo
-  exit 1
+  php -d memory_limit=-1 /app/vendor/drush/drush/drush deploy:hook -y
+  if [[ $? != 0 ]]; then
+    echo
+    echo -e "${RED}Deploy hooks failed!${NORMAL} ❌"
+    echo
+    exit 1
+  fi
 fi
 
 echo
@@ -128,4 +134,9 @@ php -d memory_limit=-1 /app/vendor/drush/drush/drush cr
 if [ "$USERS" = true ]; then
   # Create test user accounts.
   /app/lando/scripts/drupal-create-users.sh
+
+  echo -e "${NORMAL}Or use this one time login link:"
+  echo
+  php -d memory_limit=-1 /app/vendor/drush/drush/drush uli
+  echo
 fi

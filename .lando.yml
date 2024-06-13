@@ -67,8 +67,6 @@ services:
 events:
   pre-start:
     - appserver: composer install
-  post-pull:
-    - appserver: /app/lando/scripts/helpers/post-pull.sh
 tooling:
   # Override Drush to run with no memory limit and use version installed by Composer instead of packaged with Lando.
   drush:

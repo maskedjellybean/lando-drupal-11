@@ -63,9 +63,3 @@ else
 fi
 
 /app/lando/scripts/helpers/drupal-update-import.sh --config all --users true
-
-echo
-echo -e "${CYAN}Or use this link to login:${NORMAL}"
-echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush uli
-echo

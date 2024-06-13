@@ -55,10 +55,8 @@ if [ "$MODE" = "off" ]; then
   echo -e "${RED}Xdebug is OFF.${NORMAL}"
   echo
 
-  echo -e "${ORANGE}Do you want to (re)enable caching in settings.local.php?"
-  echo -e "${BLUE}(y/n):${BLUE}"
-  read REPLY
-  if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+  source /app/lando/scripts/helpers/prompt-confirm.sh
+  if [[ $(prompt_confirm "Do you want to (re)enable caching in local.settings.php?") = "no" ]]; then
     exit 1
   else
     sed -i "s/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null'; \/\/ Disabled/\/\/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null';/" /app/web/sites/default/settings.local.php
@@ -84,9 +82,8 @@ else
 
   echo -e "${ORANGE}Do you want to disable caching in settings.local.php?"
   echo -e "${NORMAL}Disabling caching will make it more likely that breakpoints are triggered as expected."
-  echo -e "${BLUE}(y/n):${BLUE}"
-  read REPLY
-  if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+  source /app/lando/scripts/helpers/prompt-confirm.sh
+  if [[ $(prompt_confirm "Disable caching?") = "no" ]]; then
     exit 1
   else
     sed -i "s/\/\/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null';/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null'; \/\/ Disabled/" /app/web/sites/default/settings.local.php
