@@ -1,6 +1,3 @@
 # Lando logs
 logs/**
 
-# Lando PHP config
-configs/php/php.ini
-

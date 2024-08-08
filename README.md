@@ -7,22 +7,26 @@
 * Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a *different directory*.
 * Copy `.lando.yml` and `./lando/` from this repo into the root of the Drupal 11 project directory.
 * `cd` into the Drupal 11 project directory.
-* Edit `./web/sites/default/settings.php`
-  * Uncomment these lines:
+* Copy `./web/sites/default/default.settings.php` to `./web/sites/default/settings.php`.
+* Edit `./web/sites/default/settings.php`.
+  * Uncomment these lines at the very bottom of the file:
   ```
   if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
     include $app_root . '/' . $site_path . '/settings.local.php';
   }
   ```
 * Run `lando start`.
-* Assuming `lando start` completes successfully, visit one of the URLs given. Bypass the browser privacy warning (you'll have to do this every time after `lando start`).
+* Assuming `lando start` completes successfully, visit one of the URLs given. If using a https URL, bypass the browser privacy warning (you'll have to do this every time after `lando start`).
 * Follow the Drupal installation GUI. When asked for database credentials, enter:
   * Database name: drupal
   * Database username: drupal
   * Database password: drupal
 * You should have a working Drupal site.
+* Drupal will append database credentials to the end of `./web/sites/default/settings.php`. Decide whether you want to keep them or use the ones in `./web/sites/default/settings.local.php`.
+* Require drush via Composer: `lando composer require drush/drush`
+  * Run `lando drush status` to verify it works.
 * Run `lando` to see all Lando tooling commands.
-* Feel free to delete this repo that you cloned. From this point on, do all your work within the Drupal 11 project directory.
+* Feel free to delete the repo directory that you cloned. From this point on, do all your work within the Drupal 11 project directory.
 * We're using the Lando Drupal plugin and the `drupal11` recipe, so be sure to read the Lando docs (https://docs.lando.dev/plugins/drupal/tooling.html).
 
 # If using as the basis of an actual project

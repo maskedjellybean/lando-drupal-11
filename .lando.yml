@@ -12,12 +12,6 @@ config:
 services:
   appserver:
     build_as_root:
-      # Configure PHP.
-      # For some reason php.ini keeps being copied as a directory.
-      # To fix this on rebuild where it's already happened, we need to remove the directory.
-      - rm -rf /app/lando/configs/php/php.ini
-      - rm -f /app/lando/configs/php/php.ini
-      - cp /app/lando/configs/php/default.php.ini /app/lando/configs/php/php.ini
       # Create error logs.
       - mkdir -p /app/lando/logs
       - rm -f /app/lando/logs/php_errors.log
@@ -64,9 +58,6 @@ services:
         - /dev/shm:/dev/shm
         - ./tests/behat/media:/media:cached
       command: /opt/bin/entry_point.sh
-events:
-  pre-start:
-    - appserver: composer install
 tooling:
   # Override Drush to run with no memory limit and use version installed by Composer instead of packaged with Lando.
   drush:
