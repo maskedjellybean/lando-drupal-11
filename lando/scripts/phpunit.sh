@@ -22,8 +22,8 @@ mkdir -p /app/reports/phpunit
 sed -i 's/<env name=\"BROWSERTEST_OUTPUT_BASE_URL\" value=\"\"\/>/<env name=\"BROWSERTEST_OUTPUT_BASE_URL\" value=\"http:\/\/drupal-11-dev\.lndo\.site\"\/>/' /app/web/core/phpunit.xml
 
 # Delete previous results.
-rm /app/web/sites/simpletest/browser_output/*.html
-rm /app/web/sites/simpletest/browser_output/*.counter
+rm -f /app/web/sites/simpletest/browser_output/*.html
+rm -f /app/web/sites/simpletest/browser_output/*.counter
 
 # Run phpunit using Drupal core config.
 /app/vendor/bin/phpunit -c /app/web/core $ARGS
