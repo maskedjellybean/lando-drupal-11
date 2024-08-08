@@ -4,7 +4,7 @@
 
 * Install Lando (https://docs.lando.dev/install/macos.html).
 * Git clone this repo.
-* Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a different directory.
+* Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a *different directory*.
 * Copy `.lando.yml` and `./lando/` from this repo into the root of the Drupal 11 project directory.
 * `cd` into the Drupal 11 project directory.
 * Edit `./web/sites/default/settings.php`
