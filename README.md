@@ -119,9 +119,30 @@ You will need to run `lando composer require --dev vincentlanglet/twig-cs-fixer`
 ```
 lando behat
 ```
+or
+```
+lando behat features/feature-name.feature
+```
 Runs Behat tests.
 
+https://docs.behat.org/en/v2.5/guides/6.cli.html
+
 You will need to configure and require Behat and dependencies first.
+
+## PHPUnit
+```
+lando phpunit
+```
+or
+```
+lando phpunit path/to/test.php
+```
+Runs PHPUnit tests.
+
+https://phpunit.de/documentation.html
+
+I've documented my approach to running PHPUnit with Lando here:
+https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-tests#s-custom-lando-phpunit-tooling-command
 
 ## Xdebug
 ```
