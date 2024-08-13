@@ -31,6 +31,9 @@ services:
       - cp /app/lando/configs/drupal/development.services.yml /app/web/sites/development.services.yml
     overrides:
       environment:
+        # PHPUnit configuration. Sometimes the configuration in phpunit.xml is ignored.
+        SIMPLETEST_BASE_URL: "http://drupal-11-dev.lndo.site"
+        SIMPLETEST_DB: "mysql://drupal:drupal@database/drupal"
         BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "https://drupal-11-dev.lndo.site/"}, "Drupal\\DrupalExtension" : {"drush" : { "root": "/app/web" }}}}'
         # Support debugging Drush with Xdebug.
         PHP_IDE_CONFIG: "serverName=appserver"
