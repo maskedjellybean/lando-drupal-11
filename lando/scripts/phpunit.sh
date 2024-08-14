@@ -9,7 +9,7 @@ source /app/lando/scripts/helpers/color-vars.sh
 
 ARGS="$@"
 
-# Based on: https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-tests#s-configure-phpunit
+# Based on: https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-tests-in-lando
 
 # Copy Drupal core phpunit config.
 cp /app/web/core/phpunit.xml.dist /app/web/core/phpunit.xml
