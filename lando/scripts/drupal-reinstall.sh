@@ -7,7 +7,7 @@
 
 source /app/lando/scripts/helpers/color-vars.sh
 
-echo -e "${CYAN}"
+echo -e "${RED}"
 cat << "EOF"
 
     ____       _            __        ____   ____                         __
