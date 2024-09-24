@@ -4,7 +4,7 @@
 
 1. Install Lando (https://docs.lando.dev/install/macos.html).
 2. Git clone this repo.
-3. Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a *different directory*.
+3. Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a *different directory* than where you have cloned this repo.
 4. Copy `.lando.yml` and `./lando/` from this repo into the root of the Drupal 11 project directory.
 5. `cd` into the Drupal 11 project directory.
 6. Copy `./web/sites/default/default.settings.php` to `./web/sites/default/settings.php`.
@@ -21,7 +21,7 @@
   * Database username: drupal
   * Database password: drupal
   * After completing the installation, you should have a working Drupal site.
-11. Drupal will append database credentials to the end of `./web/sites/default/settings.php`. Decide whether you want to keep them or use the ones in `./web/sites/default/settings.local.php`.
+11. Drupal will append database credentials to the end of `./web/sites/default/settings.php`. Our custom build steps defined in `.lando.yml` will also create `./web/sites/default/settings.local.php` and define database credentials there. Decide where you want to keep your database credentials and delete the other.
 12. Require drush via Composer: `lando composer require drush/drush`
 13. Run `lando drush status` to verify it works.
 14. Run `lando` to see all Lando tooling commands.
@@ -31,7 +31,7 @@
 # If using as the basis of an actual project
 
 After following the directions under "How to use", if you plan to use this as the basis of an actual project:
-* Run `lando destroy -y && lando start`. Beware you will lose your current database.
+* Run `lando destroy -y`. Beware you will lose your current database.
 * Find all instances of "drupal-11-dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
 * Follow steps 8 - 11 under "How to use". Set the database password to something more secure if you plan to import this database to a production environment some day.
 
