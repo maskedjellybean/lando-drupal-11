@@ -27,11 +27,18 @@ echo
 echo -e "${CYAN}Searching Behat step definitions for \"$ARGS\"...${NORMAL}"
 echo
 
-/app/vendor/bin/behat --config /app/tests/behat/behat.yml --definitions="$ARGS" --profile local --suite default
-# @todo Turns out there is a built in search so we probably don't need any of the following lines...
-# Sed 1: Capture lines from line containing search term (case insensitive) to  "()`" (end of method name)
-# Sed 2: Add new line before "default"
-# Grep 1: Highlight "default" to end of line (highlights the step definition)
-#/app/vendor/bin/behat --config /app/tests/behat/behat.yml -di --profile local --suite default | sed -n -e "/$ARGS/I,/()\`/ p" | sed -r 's/default /\n&/' | GREP_COLOR='033;33' grep -E --color=always '^default((.*?))|$'
+# There is a built in Behat step definition search, but it only searches literal step definitions ("@when I do this").
+# Our attempt searches the entire docblock and method name.
+# Does not search variable names in docblock because for some reason those are excluded from `behat -di`.
+# Grep 1: Searches for "default |" then searches for $ARGS but does not match if it finds "()`" before $ARGS. If $ARGS is found, matches until "()`".
+# grep -i = case insensitive
+# grep -P = Perl compatible
+# grep -o = Print only matching
+# grep -z = Treat input as set of lines
+# Sed 1: Adds new lines before "default"
+# Grep 2: Highlight "default |" to end of line (highlights the step definition)
+/app/vendor/bin/behat --config /app/tests/behat/behat.yml -di --profile local --suite default | grep -oPzi "((?:default \|)(?:(?:.(?!\(\)\`)|\n)*?)(?:$ARGS)(?:(?:.|\n)*?)(?:\(\)\`))" | sed -r 's/default \|/\n\n&/' | GREP_COLOR='mt=033;33' grep -Ea --color=always '^default((.*?))|$'
 # @todo Highlight search term while leaving entire step definition line highlighted a different color.
 # sed "/^default((.*?))($ARGS)/ s//\`printf \"\033[32m$ARGS\033[0m\"\`/"
+
+/app/lando/scripts/helpers/behat-prep.sh reset

@@ -149,7 +149,7 @@ https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-
 
 ## Xdebug
 ```
-lando xdebug
+xdebug [mode | "on" | "off"]
 ```
 Toggles Xdebug on/off. Optionally enables/disables caching by modifying `settings.local.php`. Disabling caching ensures breakpoints are triggered.
 
@@ -161,7 +161,7 @@ You will also need to configure your IDE.
 
 Run:
 ```
-lando xdebug
+lando xdebug on
 ```
 
 ## PhpStorm configuration

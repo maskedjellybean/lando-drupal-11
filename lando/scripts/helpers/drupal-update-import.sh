@@ -19,7 +19,6 @@ USERS=true;
 while (( "$#" )); do
   case "$1" in
     -c|--config|--config=*)
-      echo '--'
       if [ "${1##--config=}" != "$1" ]; then
         CONFIG="${1##--config=}"
         shift
@@ -29,7 +28,6 @@ while (( "$#" )); do
       fi
       ;;
     -u|--users|--users=*)
-      echo '--'
       if [ "${1##--users=}" != "$1" ]; then
         USERS="${1##--users=}"
         shift
@@ -89,9 +87,9 @@ if [ "$CONFIG" = 'all' ]; then
     exit 1
   fi
 elif [ "$CONFIG" = 'local' ]; then
-    echo
-    echo -e "${CYAN}Importing local config split...${NORMAL}"
-    echo
+  echo
+  echo -e "${CYAN}Importing local config split...${NORMAL}"
+  echo
   php -d memory_limit=-1 /app/vendor/drush/drush/drush config-split:import local -y
   if [[ $? != 0 ]]; then
     echo

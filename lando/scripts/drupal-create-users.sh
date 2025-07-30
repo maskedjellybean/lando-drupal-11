@@ -13,7 +13,12 @@ echo ""
 echo -e "${CYAN}Creating test user accounts...${NORMAL} ${P[RANDOM%${#P[@]}]} ${P[RANDOM%${#P[@]}]} ${P[RANDOM%${#P[@]}]} ${P[RANDOM%${#P[@]}]}"
 echo ""
 
-drush ucrt admin --mail="test+admin@test.com" --password="thisisonlyatest"; drush user:password admin "thisisonlyatest"; drush urol administrator admin; drush uublk admin;
+# Check for existence of admin before creating to avoid throwing error.
+ADMIN_STATUS=$(drush user:information admin 2>&1 | grep "Unable to find a matching user")
+if [ ! -z "${ADMIN_STATUS}" ]; then
+  drush ucrt admin --mail="test+admin@test.com" --password="thisisonlyatest";
+fi
+drush user:password admin "thisisonlyatest"; drush urol administrator admin; drush uublk admin;
 
 # @todo Modify this as needed for your project.
 #drush ucrt testsupport --mail="test+support@test.com" --password="thisisonlyatest"; drush user:password testsupport "thisisonlyatest"; drush urol support testsupport; drush uublk testsupport;

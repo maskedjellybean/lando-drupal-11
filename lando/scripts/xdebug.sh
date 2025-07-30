@@ -62,6 +62,9 @@ if [ "$MODE" = "off" ]; then
     sed -i "s/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null'; \/\/ Disabled/\/\/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null';/" /app/web/sites/default/settings.local.php
     sed -i "s/\$settings\['cache'\]\['bins'\]\['page'\] = 'cache.backend.null'; \/\/ Disabled/\/\/\$settings\['cache'\]\['bins'\]\['page'\] = 'cache.backend.null';/" /app/web/sites/default/settings.local.php
     sed -i "s/\$settings\['cache'\]\['bins'\]\['dynamic_page_cache'\] = 'cache.backend.null'; \/\/ Disabled/\/\/\$settings\['cache'\]\['bins'\]\['dynamic_page_cache'\] = 'cache.backend.null';/" /app/web/sites/default/settings.local.php
+
+    echo -e "${GREEN}Caching enabled.${NORMAL}"
+    echo
   fi
 else
   if [ "$MODE" = "on" ]; then
@@ -89,5 +92,8 @@ else
     sed -i "s/\/\/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null';/\$settings\['cache'\]\['bins'\]\['render'\] = 'cache.backend.null'; \/\/ Disabled/" /app/web/sites/default/settings.local.php
     sed -i "s/\/\/\$settings\['cache'\]\['bins'\]\['page'\] = 'cache.backend.null';/\$settings\['cache'\]\['bins'\]\['page'\] = 'cache.backend.null'; \/\/ Disabled/" /app/web/sites/default/settings.local.php
     sed -i "s/\/\/\$settings\['cache'\]\['bins'\]\['dynamic_page_cache'\] = 'cache.backend.null';/\$settings\['cache'\]\['bins'\]\['dynamic_page_cache'\] = 'cache.backend.null'; \/\/ Disabled/" /app/web/sites/default/settings.local.php
+
+    echo -e "${GREEN}Caching disabled.${NORMAL}"
+    echo
   fi
 fi

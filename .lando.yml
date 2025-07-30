@@ -34,6 +34,9 @@ services:
         # PHPUnit configuration. Sometimes the configuration in phpunit.xml is ignored.
         SIMPLETEST_BASE_URL: "http://drupal-11-dev.lndo.site"
         SIMPLETEST_DB: "mysql://drupal:drupal@database/drupal"
+        # Note the URL here must correspond to the name of the service.
+        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"w3c":false, "args":["--disable-gpu","--headless", "--no-sandbox", "--disable-dev-shm-usage"]}}, "http://selenium-chrome:4444/wd/hub"]'
+        # Behat configuration.
         BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "https://drupal-11-dev.lndo.site/"}, "Drupal\\DrupalExtension" : {"drush" : { "root": "/app/web" }}}}'
         # Support debugging Drush with Xdebug.
         PHP_IDE_CONFIG: "serverName=appserver"
@@ -61,11 +64,14 @@ services:
         - /dev/shm:/dev/shm
         - ./tests/behat/media:/media:cached
       command: /opt/bin/entry_point.sh
+events:
+  post-db-import:
+    - appserver: /app/lando/scripts/helpers/post-db-import.sh
 tooling:
   # Override Drush to run with no memory limit and use version installed by Composer instead of packaged with Lando.
   drush:
     service: appserver
-    description: Run Drush commands
+    description: Runs Drush commands
     cmd: php -d memory_limit=-1 /app/vendor/bin/drush
   drupal-reinstall:
     service: appserver
@@ -77,7 +83,7 @@ tooling:
     description: KEEPs the current database, runs composer install, database updates, config import, deploy hooks and clears caches
     cmd:
       - /app/lando/scripts/drupal-reset.sh
-  xdebug:
+  xdebug [mode | "on" | "off"]:
     description: Starts or stops Xdebug
     cmd:
       - appserver: /app/lando/scripts/xdebug.sh
@@ -105,16 +111,16 @@ tooling:
     description: Runs Twig-CS-Fixer on custom themes and modules
     cmd:
       - /app/lando/scripts/twig-cs.sh
-  phpunit:
+  phpunit <path_to_test>:
     service: appserver
     cmd:
       - /app/lando/scripts/phpunit.sh
-  behat:
+  behat [command]:
     service: appserver
-    description: Runs Behat tests
+    description: Runs Behat CLI commands or all tests
     cmd:
       - /app/lando/scripts/behat.sh
-  behat-search-steps:
+  behat-search-steps <string>:
     service: appserver
     description: Searches (greps) Behat step definitions for string
     cmd:

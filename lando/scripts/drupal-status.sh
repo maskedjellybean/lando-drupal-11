@@ -8,7 +8,7 @@ echo
 echo -e "${CYAN}Checking the health/status of Drupal...${NORMAL} 🩺 🔍"
 echo
 
-if [[ $(drush core:status --field='Drupal bootstrap') == *"Successful"* ]]; then
+if [[ $(drush core:status --field='Drupal bootstrap' 2>&1) == *"Successful"* ]]; then
   echo -e "${GREEN}Drupal database was found!${NORMAL} 💧 ✅"
   echo
 else
