@@ -5,7 +5,7 @@
 # Use via lando tooling:
 # lando twig-cs
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 echo
 echo -e "${CYAN}Running Twig CS Fixer... ${NORMAL}"

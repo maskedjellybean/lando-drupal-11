@@ -5,7 +5,7 @@
 # Use via lando tooling:
 # lando php-cs
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 ARGS="$@"
 
@@ -35,8 +35,11 @@ elif [ "$exitStatus" = 2 ]; then
   echo
   echo -e "${CYAN}Running PHPCBF... ${NORMAL}"
   echo
-
-  /app/vendor/bin/phpcbf
+  if [[ -z "$ARGS" ]]; then
+    /app/vendor/bin/phpcbf $ARGS
+  else
+    /app/vendor/bin/phpcbf
+  fi
 elif [ "$exitStatus" = 3 ]; then
   echo
   echo -e "${CYAN}Some kind of processing error has occurred (phpcs error code 3)..️${NORMAL} 🤷‍"

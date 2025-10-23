@@ -2,10 +2,10 @@
 
 # This file is configured in .lando.yml. Run: lando drupal-status.
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 echo
-echo -e "${CYAN}Checking the health/status of Drupal...${NORMAL} 🩺 🔍"
+echo -e "${CYAN}Checking the health/status of Drupal...${NORMAL} 🩺 🏥"
 echo
 
 if [[ $(drush core:status --field='Drupal bootstrap' 2>&1) == *"Successful"* ]]; then
@@ -19,13 +19,14 @@ fi
 
 echo -e "${CYAN}Running drush status so you know what's up...${NORMAL} 📊"
 echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush status
+php -d memory_limit=-1 $DRUSH_CMD status
 echo
-echo -e "${CYAN}Running drush config:status so you know if all config is imported...${NORMAL} 📊"
+echo -e "${CYAN}Running drush config:status so you know if all config is imported...${NORMAL} ⚙️  📊"
 echo
-STATUS=$(php -d memory_limit=-1 /app/vendor/drush/drush/drush cst)
-echo
+STATUS=$(php -d memory_limit=-1 $DRUSH_CMD cst 2>/dev/null)
 if [[ STATUS = *Different* ]]; then
+  php -d memory_limit=-1 $DRUSH_CMD cst
+  echo
   echo -e "${RED}There is some stuck/overridden config. You may need to export and commit these to unstuck them.${NORMAL} ⚠️️"
   echo
 else
@@ -33,6 +34,6 @@ else
   echo
 fi
 
-echo -e "${CYAN}Running composer audit to check for security vulnerabilities...${NORMAL} 🩺 🔍 🛡️"
+echo -e "${CYAN}Running composer audit to check for security vulnerabilities...${NORMAL} 🔐 🛡️"
 echo
 composer audit

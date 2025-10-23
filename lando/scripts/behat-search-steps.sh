@@ -11,7 +11,7 @@
 # Usage example:
 # lando behat-search-steps I visit
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 ARGS="$@"
 

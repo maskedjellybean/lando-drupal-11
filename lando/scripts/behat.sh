@@ -5,7 +5,7 @@
 # Use via lando tooling:
 # lando behat features/Group-Admin-View.feature:40
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 ARGS="$@"
 

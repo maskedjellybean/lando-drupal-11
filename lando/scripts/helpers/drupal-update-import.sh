@@ -9,7 +9,7 @@
 # --users
 #   boolean. Whether to create test users (true or false).
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 # Set argument option defaults
 CONFIG='all';
@@ -62,7 +62,7 @@ fi
 echo
 echo -e "${CYAN}Running database updates...${NORMAL}"
 echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush updb -y
+php -d memory_limit=-1 $DRUSH_CMD updb -y
 if [[ $? != 0 ]]; then
   echo
   echo -e "${RED}Database updates failed!${NORMAL} ❌"
@@ -73,13 +73,13 @@ fi
 echo
 echo -e "${CYAN}Clearing caches...${NORMAL}"
 echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush cr
+php -d memory_limit=-1 $DRUSH_CMD cr
 
 if [ "$CONFIG" = 'all' ]; then
   echo
   echo -e "${CYAN}Running config import...${NORMAL}"
   echo
-  php -d memory_limit=-1 /app/vendor/drush/drush/drush cim -y
+  php -d memory_limit=-1 -d max_execution_time=-1 $DRUSH_CMD cim -y
   if [[ $? != 0 ]]; then
     echo
     echo -e "${RED}Config import failed!.${NORMAL} ❌"
@@ -90,7 +90,7 @@ elif [ "$CONFIG" = 'local' ]; then
   echo
   echo -e "${CYAN}Importing local config split...${NORMAL}"
   echo
-  php -d memory_limit=-1 /app/vendor/drush/drush/drush config-split:import local -y
+  php -d memory_limit=-1 -d max_execution_time=-1 $DRUSH_CMD config-split:import local -y
   if [[ $? != 0 ]]; then
     echo
     echo -e "${RED}Config import failed!${NORMAL} ❌"
@@ -102,7 +102,7 @@ fi
 echo
 echo -e "${CYAN}Clearing caches...${NORMAL}"
 echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush cr
+php -d memory_limit=-1 $DRUSH_CMD cr
 
 # Only run deploy hooks if we've imported all config
 # because a deploy hook may depend on new config having been
@@ -112,7 +112,7 @@ if [ "$CONFIG" = 'all' ]; then
   echo
   echo -e "${CYAN}Running deploy hooks...${NORMAL}"
   echo
-  php -d memory_limit=-1 /app/vendor/drush/drush/drush deploy:hook -y
+  php -d memory_limit=-1 $DRUSH_CMD deploy:hook -y
   if [[ $? != 0 ]]; then
     echo
     echo -e "${RED}Deploy hooks failed!${NORMAL} ❌"
@@ -124,7 +124,7 @@ fi
 echo
 echo -e "${CYAN}Clearing caches...${NORMAL}"
 echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush cr
+php -d memory_limit=-1 $DRUSH_CMD cr
 
 # Run Drupal health/status check.
 /app/lando/scripts/drupal-status.sh
@@ -135,6 +135,6 @@ if [ "$USERS" = true ]; then
 
   echo -e "${NORMAL}Or use this one time login link:"
   echo
-  php -d memory_limit=-1 /app/vendor/drush/drush/drush uli
+  php -d memory_limit=-1 $DRUSH_CMD uli
   echo
 fi

@@ -5,7 +5,7 @@
 # Use via lando tooling:
 # lando drupal-reinstall.
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 echo -e "${RED}"
 cat << "EOF"
@@ -19,20 +19,15 @@ EOF
 echo -e "${NORMAL}"
 
 echo -e "${ORANGE}Are you sure you want to drop the database, run composer install and (re)install the site?"
-echo -e "${RED}You will lose all unexported config and ALL database content. 💣  💧  ⚠️"
+echo -e "${RED}You will lose ALL database content. 💣  💧  ⚠️"
 source /app/lando/scripts/helpers/prompt-confirm.sh
 if [[ $(prompt_confirm "Proceed?") = "no" ]]; then
   exit 1
 fi
 
-echo
 echo -e "${CYAN}Dropping database, running composer install, running drush site:install, config import, deploy hooks and clearing caches...${NORMAL}"
-echo
 
-echo
-echo -e "${CYAN}Dropping database...${NORMAL} 🧨"
-echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush sql-drop -y
+/app/lando/scripts/helpers/db-drop.sh
 
 echo
 echo -e "${CYAN}Running composer install...${NORMAL}"
@@ -48,25 +43,24 @@ fi
 echo
 echo -e "${CYAN}Running drush site:install. This will take a while...${NORMAL} ⏱"
 echo
-php -d memory_limit=-1 /app/vendor/drush/drush/drush site:install -y --existing-config --account-pass=password
+php -d memory_limit=-1 $DRUSH_CMD site:install -y --existing-config --account-pass=password
 
 echo
 echo -e "${CYAN}Running drush status...${NORMAL}"
 echo
 # There's really no reason to do this here, but for some reason it helps
 # avoid this error: "The "" entity type does not exist".
-/app/vendor/drush/drush/drush status
+$DRUSH_CMD status
 
 echo
 echo -e "${CYAN}Clearing caches...${NORMAL}"
 echo
-/app/vendor/drush/drush/drush cr
+$DRUSH_CMD cr
 
 echo
 echo -e "${CYAN}Checking the Drupal installation...${NORMAL} 🩺 🔍"
-echo
 
-if [[ $(/app/vendor/drush/drush/drush core:status --field='Drupal bootstrap') == *"Successful"* ]]; then
+if [[ $($DRUSH_CMD core:status --field='Drupal bootstrap') == *"Successful"* ]]; then
   echo
   echo -e "${GREEN}Drupal was successfully installed!${NORMAL} 💧 ✅"
   echo

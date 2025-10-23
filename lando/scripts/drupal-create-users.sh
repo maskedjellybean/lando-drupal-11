@@ -5,7 +5,7 @@
 # Use via Lando tooling:
 # lando drupal-create-users.
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 P=(👩🏻‍🚀 🧑🏿‍🚒 👩🏽‍🍳 👷🏾 👩🏼‍ 🦹🏽‍️ 🧑🏼‍🎨 👮🏾 👨🏻‍🎤 👨🏽‍🌾 👩🏼‍🔧 👩🏾‍🔬 🧑🏿‍🏫)
 

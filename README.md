@@ -32,7 +32,7 @@
 
 After following the directions under "How to use", if you plan to use this as the basis of an actual project:
 * Run `lando destroy -y`. Beware you will lose your current database.
-* Find all instances of "drupal-11-dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
+* Find all instances of "drupal-11-dev" and "drupal_11_dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
 * Follow steps 8 - 11 under "How to use". Set the database password to something more secure if you plan to import this database to a production environment some day.
 
 ## Configuration

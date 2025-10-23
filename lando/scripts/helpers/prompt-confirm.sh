@@ -8,7 +8,7 @@
 #  echo "Selected yes"
 # fi
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 prompt_confirm() {
   read -r -p "$(echo -e $ORANGE)${1:-Are you sure?} [Y/n] $(echo -e $BLUE)" response
@@ -16,6 +16,8 @@ prompt_confirm() {
   if [[ $response =~ [yY](es)* ]]; then
     echo "yes"
   elif [[ $response = '' ]]; then
+    echo -e "${BLUE}Yes${NORMAL}" >&2
+    echo >&2
     echo "yes"
   else
     echo "no"

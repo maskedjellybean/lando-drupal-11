@@ -12,7 +12,7 @@
 # Usage example:
 # lando xdebug on
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 MODE='on'
 

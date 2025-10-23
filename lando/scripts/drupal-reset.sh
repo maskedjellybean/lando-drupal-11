@@ -5,7 +5,7 @@
 # Use via lando tooling:
 # lando drupal-reset.
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 echo -e "${ORANGE}"
 cat << "EOF"

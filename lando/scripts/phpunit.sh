@@ -5,9 +5,13 @@
 # Use via lando tooling:
 # lando phpunit web/path/to/Test.php
 
-source /app/lando/scripts/helpers/color-vars.sh
+source /app/lando/scripts/helpers/vars.sh
 
 ARGS="$@"
+
+echo -e "${NORMAL}If test that extends WebDriverTestBase is unresponsive, try running:${NORMAL}"
+echo -e "${NORMAL}docker container restart drupal_11_dev_selenium-chrome_1${NORMAL}"
+echo
 
 # Based on: https://www.drupal.org/docs/develop/automated-testing/phpunit-in-drupal/running-phpunit-tests-in-lando
 
