@@ -37,8 +37,6 @@ echo
 # grep -z = Treat input as set of lines
 # Sed 1: Adds new lines before "default"
 # Grep 2: Highlight "default |" to end of line (highlights the step definition)
-/app/vendor/bin/behat --config /app/tests/behat/behat.yml -di --profile local --suite default | grep -oPzi "((?:default \|)(?:(?:.(?!\(\)\`)|\n)*?)(?:$ARGS)(?:(?:.|\n)*?)(?:\(\)\`))" | sed -r 's/default \|/\n\n&/' | GREP_COLOR='mt=033;33' grep -Ea --color=always '^default((.*?))|$'
+/app/vendor/bin/behat --config "$BEHAT_LANDO_CONFIG" -di --profile local --suite default | grep -oPzi "((?:default \|)(?:(?:.(?!\(\)\`)|\n)*?)(?:$ARGS)(?:(?:.|\n)*?)(?:\(\)\`))" | sed -r 's/default \|/\n\n&/' | GREP_COLOR='mt=033;33' grep -Ea --color=always '^default((.*?))|$'
 # @todo Highlight search term while leaving entire step definition line highlighted a different color.
 # sed "/^default((.*?))($ARGS)/ s//\`printf \"\033[32m$ARGS\033[0m\"\`/"
-
-/app/lando/scripts/helpers/behat-prep.sh reset

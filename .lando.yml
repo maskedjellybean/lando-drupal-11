@@ -91,6 +91,16 @@ tooling:
     description: KEEPs the current database, runs composer install, database updates, config import, deploy hooks and clears caches
     cmd:
       - /app/lando/scripts/drupal-reset.sh
+  drupal-search-services <string>:
+    service: appserver
+    description: Searches (greps) Drupal container service names by string
+    cmd:
+      - /app/lando/scripts/drupal-search-services.sh
+  drupal-search-routes <string>:
+    service: appserver
+    description: Searches (greps) Drupal route names by string
+    cmd:
+      - /app/lando/scripts/drupal-search-routes.sh
   xdebug [mode | "on" | "off"]:
     description: Starts or stops Xdebug
     cmd:

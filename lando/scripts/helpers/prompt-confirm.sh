@@ -11,15 +11,15 @@
 source /app/lando/scripts/helpers/vars.sh
 
 prompt_confirm() {
-  read -r -p "$(echo -e $ORANGE)${1:-Are you sure?} [Y/n] $(echo -e $BLUE)" response
+  read -r -p "$(echo -e $ORANGE)${1:-Are you sure?} [[Y]/n] $(echo -e $BLUE)" response
   echo -e "${NORMAL}" > $(tty)
   if [[ $response =~ [yY](es)* ]]; then
-    echo "yes"
+    echo "Yes"
   elif [[ $response = '' ]]; then
     echo -e "${BLUE}Yes${NORMAL}" >&2
     echo >&2
-    echo "yes"
+    echo "Yes"
   else
-    echo "no"
+    echo "No"
   fi
 }
