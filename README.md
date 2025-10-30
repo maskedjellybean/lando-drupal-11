@@ -1,21 +1,74 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Lando config for Drupal 11 plus useful tooling commands/scripts](#lando-config-for-drupal-11-plus-useful-tooling-commandsscripts)
+- [How to use](#how-to-use)
+- [If using as the basis of an actual project](#if-using-as-the-basis-of-an-actual-project)
+  - [Configuration](#configuration)
+- [Non custom Lando tooling commands](#non-custom-lando-tooling-commands)
+  - [lando composer](#lando-composer)
+- [Slightly custom Lando tooling commands](#slightly-custom-lando-tooling-commands)
+  - [lando drush](#lando-drush)
+- [Custom Lando tooling commands](#custom-lando-tooling-commands)
+  - [lando drupal-reinstall](#lando-drupal-reinstall)
+  - [lando drupal-reset](#lando-drupal-reset)
+  - [lando drupal-create-users](#lando-drupal-create-users)
+  - [lando drupal-search-routes <string>](#lando-drupal-search-routes-string)
+  - [lando drupal-search-services <string>](#lando-drupal-search-services-string)
+  - [lando logs-drupal](#lando-logs-drupal)
+  - [lando logs-php](#lando-logs-php)
+  - [PHPCS](#phpcs)
+  - [Twig CS Fixer](#twig-cs-fixer)
+  - [Behat](#behat)
+  - [PHPUnit](#phpunit)
+  - [Xdebug](#xdebug)
+- [Lando, PhpStorm & Xdebug](#lando-phpstorm--xdebug)
+  - [Enabling Xdebug](#enabling-xdebug)
+  - [PhpStorm configuration](#phpstorm-configuration)
+    - [Create a CLI Interpreter](#create-a-cli-interpreter)
+    - [Configure Include Paths](#configure-include-paths)
+    - [Configure Debug settings](#configure-debug-settings)
+    - [Configure Server settings](#configure-server-settings)
+  - [Setting breakpoints](#setting-breakpoints)
+    - [Troubleshooting breakpoints](#troubleshooting-breakpoints)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Lando config for Drupal 11 plus useful tooling commands/scripts
 
 # How to use
 
 1. Install Lando (https://docs.lando.dev/install/macos.html).
-2. Git clone this repo.
-3. Go to https://www.drupal.org/project/drupal/releases/11.x-dev and run the `composer create-project` command shown there to create a Drupal 11 project in a *different directory* than where you have cloned this repo.
-4. Copy `.lando.yml` and `./lando/` from this repo into the root of the Drupal 11 project directory.
-5. `cd` into the Drupal 11 project directory.
-6. Copy `./web/sites/default/default.settings.php` to `./web/sites/default/settings.php`.
+2. Git clone this repo. Do not `cd` into it yet:
+   ```
+   git clone git@github.com:maskedjellybean/lando-drupal-11.git 
+   ```
+3. Install Drupal using Composer into a separate directory. Change "my-d11-project" to whatever you want your project to be called:
+   ```
+   composer create-project drupal/recommended-project:11.x-dev@dev "my-d11-project"
+   ```
+4. Copy the Lando files from the cloned repo to the Drupal 11 project directory (replace "my-d11-project"):
+   ```
+   cp lando-drupal-11/.lando.yml my-d11-project/.lando.yml; cp -r lando-drupal-11/lando/ my-d11-project/lando
+   ```  
+5. `cd` into the Drupal 11 project directory (replace "my-d11-project"):
+   ```
+   cd my-d11-project
+   ```
+6. Create a default settings.php file:
+   ```
+   cp ./web/sites/default/default.settings.php ./web/sites/default/settings.php
+   ```
 7. Edit `./web/sites/default/settings.php`. Uncomment these lines at the very bottom of the file:
   ```
   if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
     include $app_root . '/' . $site_path . '/settings.local.php';
   }
   ```
-8. Run `lando start`.
-9. Assuming `lando start` completes successfully, visit one of the URLs given. If using a https URL, bypass the browser privacy warning (you'll have to do this every time after `lando start`).
+8. Edit `./lando.yml` and replace all instances of "my-d11-project" with your project name.
+9. Run `lando start`.
+9. Assuming `lando start` completes successfully, visit one of the APPSERVER URLs given. If using a https URL, bypass the browser privacy warning (you'll have to do this every time after `lando start`).
 10. Follow the Drupal installation GUI. When asked for database credentials, enter:
   * Database name: drupal
   * Database username: drupal
@@ -25,15 +78,13 @@
 12. Require drush via Composer: `lando composer require drush/drush`
 13. Run `lando drush status` to verify it works.
 14. Run `lando` to see all Lando tooling commands.
-15. Feel free to delete the repo directory that you cloned. From this point on, do all your work within the Drupal 11 project directory.
+15. Feel free to delete the lando-drupal-11 directory that you cloned. From this point on, do all your work within the Drupal 11 project directory.
 16. We're using the Lando Drupal plugin and the `drupal11` recipe, so be sure to read the Lando docs (https://docs.lando.dev/plugins/drupal/tooling.html).
 
 # If using as the basis of an actual project
 
 After following the directions under "How to use", if you plan to use this as the basis of an actual project:
-* Run `lando destroy -y`. Beware you will lose your current database.
-* Find all instances of "drupal-11-dev" and "drupal_11_dev" within `.lando.yml` and `./lando/` in the Drupal 11 project directory and replace with the name of your project.
-* Follow steps 8 - 11 under "How to use". Set the database password to something more secure if you plan to import this database to a production environment some day.
+* Set the database credentials to something more secure if you plan to import this database to a production environment.
 
 ## Configuration
 
@@ -90,6 +141,18 @@ lando drupal-create-users
 ```
 Creates Drupal test users. You will need to modify `./lando/scripts/drupal-create-users.sh` for your project.
 
+## lando drupal-search-routes <string>
+```
+lando drupal-search-routes <string>
+```
+Searches (greps) Drupal route names by string.
+
+## lando drupal-search-services <string>
+```
+lando drupal-search-services <string>
+```
+Searches (greps) Drupal container service names by string.
+
 ## lando logs-drupal
 ```
 lando logs-drupal
@@ -131,6 +194,10 @@ Runs Behat tests.
 https://docs.behat.org/en/v2.5/guides/6.cli.html
 
 You will need to configure and require Behat and dependencies first.
+
+https://www.drupal.org/project/drupalextension
+
+Set BEHAT_CONFIG variable in ./lando/scripts/helpers/vars.sh to point to your behat.yml.
 
 ## PHPUnit
 ```

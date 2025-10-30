@@ -29,9 +29,6 @@ DRUSH_CMD="/app/vendor/drush/drush/drush.php"
 
 # Default Behat config.
 BEHAT_CONFIG="/app/tests/behat/behat.yml"
-# Behat Lando config.
-# This will be created by copying behat.yml in behat-config-lando-copy.sh.
-BEHAT_LANDO_CONFIG="/app/tests/behat/local.yml"
 
 # Text color variables.
 NORMAL="\033[0m"

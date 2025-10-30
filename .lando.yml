@@ -1,7 +1,7 @@
-name: drupal-11-dev
+name: my-d11-project
 recipe: drupal11
 config:
-  site: drupal-11-dev
+  site: my-d11-project
   webroot: web
   php: '8.3'
   # Set xdebug to off by default. Enable it with lando xdebug.
@@ -34,15 +34,15 @@ services:
     overrides:
       environment:
         # PHPUnit configuration. Sometimes the configuration in phpunit.xml is ignored.
-        SIMPLETEST_BASE_URL: "http://drupal-11-dev.lndo.site"
+        SIMPLETEST_BASE_URL: "http://my-d11-project.lndo.site"
         SIMPLETEST_DB: "mysql://drupal:drupal@database/drupal"
         # Note the URL here must correspond to the name of the service.
         MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"w3c":false, "args":["--disable-gpu","--headless", "--no-sandbox", "--disable-dev-shm-usage"]}}, "http://selenium-chrome:4444/wd/hub"]'
         # Behat configuration.
-        BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "https://drupal-11-dev.lndo.site/"}, "Drupal\\DrupalExtension" : {"drush" : { "root": "/app/web" }}}}'
+        BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "https://my-d11-project.lndo.site/"}, "Drupal\\DrupalExtension" : {"drush" : { "root": "/app/web" }}}}'
         # Support debugging Drush with Xdebug.
         PHP_IDE_CONFIG: "serverName=appserver"
-        DRUSH_OPTIONS_URI: "https://drupal-11-dev.lndo.site/"
+        DRUSH_OPTIONS_URI: "https://my-d11-project.lndo.site/"
         # This is apparently necessary to overwrite the default Xdebug 3.0
         # config so that our config in /lando/configs/php/php.ini is used.
         XDEBUG_MODE:
@@ -74,7 +74,7 @@ tooling:
   drush:
     service: appserver
     description: Runs Drush commands
-    cmd: php -d memory_limit=-1 -d max_execution_time=-1 /app/vendor/bin/drush
+    cmd: php -d memory_limit=-1 -d max_execution_time=-1 /app/vendor/drush/drush/drush.php
   db-import <file>:
     service: :host
     user: root
@@ -138,6 +138,8 @@ tooling:
     description: Runs Behat CLI commands or all tests
     cmd:
       - /app/lando/scripts/behat.sh
+      # Rewrite any HTML snapshots to play nicely with Lando.
+      - /app/lando/scripts/helpers/behat-rewrite-html-snapshots.sh
   behat-search-steps <string>:
     service: appserver
     description: Searches (greps) Behat step definitions for string
