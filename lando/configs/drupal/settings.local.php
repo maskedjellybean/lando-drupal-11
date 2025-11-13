@@ -93,7 +93,7 @@ $config['system.performance']['js']['preprocess'] = FALSE;
  *
  * Only use this setting once the site has been installed.
  */
-# $settings['cache']['bins']['render'] = 'cache.backend.null';
+// $settings['cache']['bins']['render'] = 'cache.backend.null';
 
 /**
  * Disable caching for migrations.
@@ -101,7 +101,7 @@ $config['system.performance']['js']['preprocess'] = FALSE;
  * Uncomment the code below to only store migrations in memory and not in the
  * database. This makes it easier to develop custom migrations.
  */
-# $settings['cache']['bins']['discovery_migration'] = 'cache.backend.memory';
+// $settings['cache']['bins']['discovery_migration'] = 'cache.backend.memory';
 
 /**
  * Disable Internal Page Cache.
@@ -115,7 +115,7 @@ $config['system.performance']['js']['preprocess'] = FALSE;
  *
  * Only use this setting once the site has been installed.
  */
-# $settings['cache']['bins']['page'] = 'cache.backend.null';
+// $settings['cache']['bins']['page'] = 'cache.backend.null';
 
 /**
  * Disable Dynamic Page Cache.
@@ -124,7 +124,7 @@ $config['system.performance']['js']['preprocess'] = FALSE;
  * cacheability metadata is present (and hence the expected behavior). However,
  * in the early stages of development, you may want to disable it.
  */
-# $settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
+// $settings['cache']['bins']['dynamic_page_cache'] = 'cache.backend.null';
 
 /**
  * Allow test modules and themes to be installed.

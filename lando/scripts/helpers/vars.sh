@@ -27,6 +27,9 @@ fi
 # Set path to drush command.
 DRUSH_CMD="/app/vendor/drush/drush/drush.php"
 
+# Drupal local settings path.
+DRUPAL_LOCAL_SETTINGS="/app/web/sites/default/settings.local.php"
+
 # Default Behat config.
 BEHAT_CONFIG="/app/tests/behat/behat.yml"
 
